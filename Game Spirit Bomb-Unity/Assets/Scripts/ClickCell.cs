@@ -13,6 +13,6 @@ public class ClickCell : MonoBehaviour
     }
 
     void OnMouseDown(){
-        GameManager.instance.PlaceGreen(cell.index);
+        GameManager.instance.PlaceGreenCell(cell.index);
     }
 }
