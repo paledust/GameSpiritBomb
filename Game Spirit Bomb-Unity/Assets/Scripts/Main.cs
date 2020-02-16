@@ -13,6 +13,11 @@ public class Main : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        //重新加载当前关卡
+        if(Input.GetKey(KeyCode.LeftShift)){
+            if(Input.GetKeyDown(KeyCode.R)){
+                GameManager.instance.RefreshLevel();
+            }
+        }
     }
 }
