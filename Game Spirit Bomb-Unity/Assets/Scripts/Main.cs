@@ -7,6 +7,10 @@ public class Main : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        InitTheLevel();
+    }
+    void InitTheLevel(){
+        GameManager.instance.GetMainCamera();
         GameManager.instance.GenerateGrid();
     }
 

@@ -9,4 +9,7 @@ public class Cell : MonoBehaviour
     public void SetIndex(Vector2Int _index){
         index = _index;
     }
+    public void SetIndex(int x, int y){
+        SetIndex(new Vector2Int(x,y));
+    }
 }
