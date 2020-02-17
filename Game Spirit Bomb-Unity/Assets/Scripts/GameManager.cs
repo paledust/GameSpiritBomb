@@ -70,7 +70,7 @@ public class GameManager : MonoBehaviour
 
         //根据摄像机的scale，以及网格总数，获取单元网格的大小
         Camera cam = Camera.main;
-        perUnitScale = (cam.orthographicSize * 4f / 3f) / RowCount;
+        perUnitScale = (cam.orthographicSize * 2 * cam.aspect) / RowCount;
 
         //设置网格根节点的起始点
         Vector2 InitOffset = new Vector2 (-perUnitScale * (RowCount - 1) / 2f, -perUnitScale * (RowCount - 1) / 2f);
