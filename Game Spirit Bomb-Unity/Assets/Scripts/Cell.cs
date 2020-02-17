@@ -4,6 +4,13 @@ using UnityEngine;
 //单位网格
 public class Cell : MonoBehaviour
 {
+    public enum CellType{
+        White,
+        Grey,
+        Red,
+        Green
+    };
+    public CellType cellType = CellType.White;
     public bool IF_Activate{get{return this.gameObject.activeSelf;}}
     public Vector2Int index{get; protected set;}
     public Vector2Int nextIndex{get; protected set;}

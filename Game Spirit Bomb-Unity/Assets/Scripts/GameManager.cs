@@ -120,6 +120,7 @@ public class GameManager : MonoBehaviour
         grid.transform.localScale *= perUnitScale;
         grid.GetComponent<Cell> ().SetIndex (pos.x, pos.y);
         GreyCells.Add (grid.GetComponent<Cell> ());
+        virusCount ++;
     }
 
     //放置绿色格子
@@ -147,10 +148,12 @@ public class GameManager : MonoBehaviour
 
         if (CheckWinState ()) {
             Debug.Log ("Win");
+            return;
         }
 
         if (CheckLoseState ()) {
             Debug.Log ("Lose");
+            return;
         }
     }
 
@@ -212,10 +215,31 @@ public class GameManager : MonoBehaviour
         return false;
     }
 
+    //获取给定位置的网格信息
+    public Cell getGrid(Vector2Int pos){
+        Vector2 rayOrigin = (Vector2)GridRoot.transform.position + new Vector2(pos.x*perUnitScale, pos.y*perUnitScale);
+        RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.zero);
+        Debug.Log(pos);
+        Debug.Log(hit.collider.gameObject.name);
+        return hit.collider.GetComponent<Cell>();
+    }
+
     //获取给定位置的绿色网格
     protected Cell getGreenGrid(Vector2Int pos) {
         int index = pos.y * RowCount + pos.x;
         return GreenCells[index].GetComponent<Cell> ();
+    }
+
+    //检查网格是否占满
+    protected bool CheckFillState(){
+        for(int i=0; i<TotalGrids; i++){
+            Vector2Int index = new Vector2Int(i%RowCount, i/RowCount);
+            if(getGrid(index).cellType == Cell.CellType.White){
+                // return false;
+            }
+        }
+
+        return true;
     }
 
     //检查胜利条件
@@ -246,6 +270,12 @@ public class GameManager : MonoBehaviour
         return true;
     }
     protected bool CheckLoseState() {
-        return GreenCount == 0 && !FirstStep;
+        if(GreenCount == 0 && !FirstStep) 
+            return true;
+        else if(CheckFillState()){
+            return GreenCount < virusCount;
+        }
+        else 
+            return false;
     }
 }
