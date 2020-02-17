@@ -11,7 +11,7 @@ public class Main : MonoBehaviour
     }
     void InitTheLevel(){
         GameManager.instance.GetMainCamera();
-        GameManager.instance.GenerateGrid();
+        GameManager.instance.GenerateGrid ();
     }
 
     // Update is called once per frame
