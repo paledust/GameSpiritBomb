@@ -130,36 +130,81 @@ public class GameManager : MonoBehaviour
             FirstStep = false;
         Steps++;
         GreenCount++;
-        getGreenGrid (pos).EnableCell ();
+        getGreenCell (pos).EnableCell ();
         Debug.Log ($"0 放置绿色格子");
         UpdateWholeGrid ();
         CheckEndState();
     }
+
     //检查胜败条件
     protected void CheckEndState(){
-        if(CheckWinState()){
-            Debug.Log("Win");
+        if(CheckFillState()){
+            if(GreenCount > virusCount){
+                Debug.Log("Win");
+                NextLevel();
+            }
+            else{
+                Debug.Log("Lose");
+                RefreshLevel();
+            }
         }
-        else if(CheckLoseState()){
-            Debug.Log("Lose");
+        else{
+            if(CheckLoseState()){
+                Debug.Log("Lose");
+                RefreshLevel();
+            }
+            else if(CheckWinState()){
+                Debug.Log("Win");
+                NextLevel();
+            }
         }
     }
 
+    //遭遇绿色格子
+    protected bool ResolveGreenCell(Cell greenCell, Cell greyCell){
+        int infectionLevel = greyCell.GetComponent<InfectionLevel>().level;
+        int healthLevel    = greenCell.GetComponent<HealthLevel>().level;
+
+        if(infectionLevel >= healthLevel){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    //消灭灰色格子
+    protected void RemoveGreyCell(Cell cell){
+        virusCount --;
+        GreyCells.Remove(cell);
+        Destroy(cell);
+    }
+
     //消灭绿色格子
-    public void RemoveGreenCell(Vector2Int pos) {
+    protected void RemoveGreenCell(Vector2Int pos) {
         GreenCount--;
-        getGreenGrid (pos).DisableCell ();
+        getGreenCell (pos).DisableCell ();
     }
 
     //更新整个网格
     protected void UpdateWholeGrid() {
-        UpdateVirusGrey ();
+        UpdateGreen ();
         UpdateVirusRed ();
+        UpdateVirusGrey ();
         Debug.Log ($"1 更新整个网格");
     }
 
+    //更新所有绿色格子
+    protected void UpdateGreen() {
+        for(int i=0; i<GreenCells.Length; i++){
+            if(GreenCells[i].IF_Activate){
+                GreenCells[i].GetComponent<HealthLevel>().UpdateLevel();
+            }
+        }
+    }
+
     //更新红色格子的位置
-    void UpdateVirusRed() {
+    protected void UpdateVirusRed() {
         VirusRed.PrepareStep ();
 
         if (IfPosGreen (VirusRed.nextIndex) || IfPosGrey (VirusRed.nextIndex)) {
@@ -171,21 +216,32 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    //更新灰色格子的位置
-    void UpdateVirusGrey() {
+    //更新灰色格子
+    protected void UpdateVirusGrey() {
         foreach (Cell cell in GreyCells) {
+            //更新灰色格子的位置
             cell.PrepareStep ();
 
             if (IfPosGrey (cell.nextIndex) || IfPosRed (cell.nextIndex)) {
                 cell.Reset ();
             }
             else if (IfPosGreen (cell.nextIndex)) {
-                RemoveGreenCell (cell.nextIndex);
-                cell.Step ();
+                if(ResolveGreenCell(getGreenCell(cell.nextIndex), cell)){
+                    RemoveGreenCell(cell.nextIndex);
+                    cell.Step ();
+                    return;
+                }
+                else{
+                    RemoveGreyCell(cell);
+                    return;
+                }
             }
             else {
                 cell.Step ();
             }
+
+            //移动之后，灰色格子感染值+1
+            cell.GetComponent<InfectionLevel>().UpgradeLevel();
         }
     }
 
@@ -198,18 +254,21 @@ public class GameManager : MonoBehaviour
 
     //检查当前网格是否为绿色
     public bool IfPosGreen(Vector2Int pos) {
-        return getGreenGrid (pos).IF_Activate;
+        if(!CheckGrid(pos)) return false;
+        return getGreenCell (pos).IF_Activate;
     }
 
     //检查当前网格是否为红色
     public bool IfPosRed(Vector2Int pos) {
+        if(!CheckGrid(pos)) return false;
         return VirusRed.index == pos;
     }
 
     //检查当前网格是否为灰色
     public bool IfPosGrey(Vector2Int pos) {
-        foreach (Cell cell in GreyCells) {
-            if (cell.index == pos)
+        if(!CheckGrid(pos)) return false;
+        for(int i=0; i<GreyCells.Count; i++){
+            if (GreyCells[i].index == pos)
                 return true;
         }
 
@@ -217,7 +276,7 @@ public class GameManager : MonoBehaviour
     }
 
     //获取给定位置的绿色网格
-    protected Cell getGreenGrid(Vector2Int pos) {
+    protected Cell getGreenCell(Vector2Int pos) {
         int index = pos.y * RowCount + pos.x;
         return GreenCells[index].GetComponent<Cell> ();
     }
@@ -266,12 +325,6 @@ public class GameManager : MonoBehaviour
         return true;
     }
     protected bool CheckLoseState() {
-        if(GreenCount == 0 && !FirstStep) 
-            return true;
-        else if(CheckFillState()){
-            return GreenCount < virusCount;
-        }
-        else 
-            return false;
+        return GreenCount == 0 && !FirstStep;
     }
 }

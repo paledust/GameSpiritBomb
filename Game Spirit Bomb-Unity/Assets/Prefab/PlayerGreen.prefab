@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4778936804903125127}
   - component: {fileID: 4778936804903125126}
   - component: {fileID: 2515807112213722174}
+  - component: {fileID: 114394871531146404}
   - component: {fileID: 7804624303777680027}
   m_Layer: 8
   m_Name: PlayerGreen
@@ -107,6 +108,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &114394871531146404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4778936804903125125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 943b8cfafefb6254cbffb200ad2fe8ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 4778936804903125126}
 --- !u!114 &7804624303777680027
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -119,4 +133,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dfb26a53758ba145b05eb3189af28ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cellType: 3

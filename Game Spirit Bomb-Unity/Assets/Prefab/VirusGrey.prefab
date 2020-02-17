@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 7639969541301661996}
   - component: {fileID: 7639969541301661999}
   - component: {fileID: 1674156888926387516}
-  - component: {fileID: 3263415232208310397}
+  - component: {fileID: 6843174508987866436}
+  - component: {fileID: 8774810925314986232}
   m_Layer: 8
   m_Name: VirusGrey
   m_TagString: Untagged
@@ -71,7 +72,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 69590eb762423a04689b8ea34e4eb3d9, type: 3}
-  m_Color: {r: 0.6037736, g: 0.6037736, b: 0.6037736, a: 1}
+  m_Color: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -107,7 +108,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &3263415232208310397
+--- !u!114 &6843174508987866436
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -116,7 +117,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 7639969541301661998}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3dfb26a53758ba145b05eb3189af28ee, type: 3}
+  m_Script: {fileID: 11500000, guid: 79f9fd0a444dd904fa08998a8299ac49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cellType: 1
+--- !u!114 &8774810925314986232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7639969541301661998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0267380c49fc5d4ab5d9acbb56624e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 7639969541301661999}
