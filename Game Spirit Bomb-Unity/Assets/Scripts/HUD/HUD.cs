@@ -30,6 +30,8 @@ public class HUD : MonoBehaviour
         startButton.transform.parent.parent = transform;
     }
     private void Start() {
+
+
         startButton.onClick.AddListener (StartGame);
     }
 
