@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -132,6 +133,16 @@ public class GameManager : MonoBehaviour
         getGreenGrid (pos).EnableCell ();
         Debug.Log ($"0 放置绿色格子");
         UpdateWholeGrid ();
+        CheckEndState();
+    }
+    //检查胜败条件
+    protected void CheckEndState(){
+        if(CheckWinState()){
+            Debug.Log("Win");
+        }
+        else if(CheckLoseState()){
+            Debug.Log("Lose");
+        }
     }
 
     //消灭绿色格子
@@ -145,16 +156,6 @@ public class GameManager : MonoBehaviour
         UpdateVirusGrey ();
         UpdateVirusRed ();
         Debug.Log ($"1 更新整个网格");
-
-        if (CheckWinState ()) {
-            Debug.Log ("Win");
-            return;
-        }
-
-        if (CheckLoseState ()) {
-            Debug.Log ("Lose");
-            return;
-        }
     }
 
     //更新红色格子的位置
@@ -215,15 +216,6 @@ public class GameManager : MonoBehaviour
         return false;
     }
 
-    //获取给定位置的网格信息
-    public Cell getGrid(Vector2Int pos){
-        Vector2 rayOrigin = (Vector2)GridRoot.transform.position + new Vector2(pos.x*perUnitScale, pos.y*perUnitScale);
-        RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.zero);
-        Debug.Log(pos);
-        Debug.Log(hit.collider.gameObject.name);
-        return hit.collider.GetComponent<Cell>();
-    }
-
     //获取给定位置的绿色网格
     protected Cell getGreenGrid(Vector2Int pos) {
         int index = pos.y * RowCount + pos.x;
@@ -233,9 +225,13 @@ public class GameManager : MonoBehaviour
     //检查网格是否占满
     protected bool CheckFillState(){
         for(int i=0; i<TotalGrids; i++){
-            Vector2Int index = new Vector2Int(i%RowCount, i/RowCount);
-            if(getGrid(index).cellType == Cell.CellType.White){
-                // return false;
+            Vector2Int pos = new Vector2Int(i%RowCount, i/RowCount);
+            if(!IfPosGrey(pos)){
+                if(!IfPosGreen(pos)){
+                    if(!IfPosRed(pos)){
+                        return false;
+                    }
+                }
             }
         }
 
