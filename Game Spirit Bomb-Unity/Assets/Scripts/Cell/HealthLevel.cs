@@ -5,6 +5,7 @@ using UnityEngine;
 public class HealthLevel : MonoBehaviour
 {
     public int level{get; protected set;}
+    public TextMesh text;
     Cell cell;
     public void UpdateLevel(){
         if(!cell) cell = GetComponent<Cell>();
@@ -20,5 +21,7 @@ public class HealthLevel : MonoBehaviour
         if(GameManager.instance.IfPosGreen(cell.index + up))   {level ++;}
         if(GameManager.instance.IfPosGreen(cell.index + left)) {level ++;}
         if(GameManager.instance.IfPosGreen(cell.index + down)) {level ++;}
+
+        text.text = level.ToString();
     }
 }
