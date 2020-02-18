@@ -177,7 +177,7 @@ public class GameManager : MonoBehaviour
     protected void RemoveGreyCell(Cell cell){
         virusCount --;
         GreyCells.Remove(cell);
-        Destroy(cell);
+        Destroy(cell.gameObject);
     }
 
     //消灭绿色格子
@@ -189,8 +189,8 @@ public class GameManager : MonoBehaviour
     //更新整个网格
     protected void UpdateWholeGrid() {
         UpdateGreen ();
-        UpdateVirusRed ();
         UpdateVirusGrey ();
+        UpdateVirusRed ();
         Debug.Log ($"1 更新整个网格");
     }
 

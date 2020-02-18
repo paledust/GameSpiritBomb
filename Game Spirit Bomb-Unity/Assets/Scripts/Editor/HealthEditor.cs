@@ -13,3 +13,16 @@ public class HealthEditor : Editor
         GUILayout.EndHorizontal();
     }
 }
+
+[CustomEditor(typeof(InfectionLevel))]
+public class InfectionEditor : Editor
+{
+    public override void OnInspectorGUI(){
+        base.OnInspectorGUI();
+        InfectionLevel infectionLevel = target as InfectionLevel;
+        GUILayout.BeginHorizontal();
+            GUILayout.Label("infection:");
+            GUILayout.TextField(infectionLevel.level.ToString());
+        GUILayout.EndHorizontal();
+    }
+}
