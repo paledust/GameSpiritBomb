@@ -5,25 +5,24 @@ using UnityEngine.UI;
 
 public class HUD : MonoBehaviour
 {
-    // 按钮
+    // 按钮 
     public Button startButton;
+    // 界面
     public Transform Runing;
-
+    public Transform Win;
+    // 声音
+    public GameObject audioOBJ;
     // 显示 Text
     public Text levelText;
     public Text stepText;
     public Text virusCountText;
     public Text healthCountText;
 
-    [HideInInspector]
-    public int healthCount;
-    [HideInInspector]
-    public int virusCount;
-    [HideInInspector]
-    public int step;
-    [HideInInspector]
-    public int level;
+    // 显示参数
+    public GameManager manager;
+
     private void Awake() {
+        audioOBJ.GetComponent<AudioManager> ().PlayAudio(0);
         Runing.gameObject.SetActive (false);
         startButton.transform.parent.gameObject.SetActive (true);
     }
@@ -32,16 +31,17 @@ public class HUD : MonoBehaviour
     }
 
     private void Update() {
-        levelText.text = "level:" + level;
-        healthCountText.text = "HealthCount:" + healthCount;
-        virusCountText.text = "VirusCount:" + virusCount;
-        stepText.text = "Step:" + step;
+        levelText.text = "level:" + manager.Level;
+        healthCountText.text = "HealthCount:" + manager.HealthCount;
+        virusCountText.text = "VirusCount:" + manager.virusCount;
+        stepText.text = "Step:" + manager.Steps;
     }
 
     // 开始按钮
     void StartGame() {
         Runing.gameObject.SetActive (true);
         startButton.transform.parent.gameObject.SetActive (false);
+        audioOBJ.GetComponent<AudioManager> ().PlayAudio (1);
     }
 
 }
