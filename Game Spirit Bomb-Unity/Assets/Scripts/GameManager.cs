@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviour
 
     //重新加载关卡
     public void RefreshLevel() {
+        GreenCount = 0;
         SceneManager.LoadScene (SceneManager.GetActiveScene ().buildIndex);
     }
 
