@@ -7,6 +7,7 @@ public class ActiveStart : MonoBehaviour
 {
     // 动态标题
     public RectTransform titleImage;
+    public RectTransform StartButtonImage;
     float activeCD = 0.7f; // 标题动态cd (需要大于0.3f)
     bool isBig = true;
     float timeFloat = 0f;
@@ -47,21 +48,25 @@ public class ActiveStart : MonoBehaviour
         else {
             if (isBig) {
                 titleImage.localScale = Vector3.Lerp (titleImage.localScale, new Vector3 (0.9f, 0.9f), 0.1f);
+                StartButtonImage.localScale = Vector3.Lerp (StartButtonImage.localScale, new Vector3 (1f, 1f), 0.1f);
             }
             else {
 
                 titleImage.localScale = Vector3.Lerp (titleImage.localScale, new Vector3 (1f, 1f), 0.1f);
+                StartButtonImage.localScale = Vector3.Lerp (StartButtonImage.localScale, new Vector3 (0.9f, 0.9f), 0.1f);
             }
         }
     }
 
     IEnumerator GetBigger() {
         titleImage.localScale = new Vector3 (1f, 1f);
+        StartButtonImage.localScale = new Vector3 (0.9f, 0.9f);
         yield return activeCD - 0.3f;
     }
 
     IEnumerator GetSmaller() {
         titleImage.localScale = new Vector3 (0.9f, 0.9f);
+        StartButtonImage.localScale = new Vector3 (1f, 1f);
         yield return activeCD - 0.3f;
     }
     #endregion
