@@ -11,7 +11,6 @@ public class TitleHoverImage : MonoBehaviour
     public RectTransform rect;
     void Awake()
     {
-        Debug.Log ($"{name} Awake");
         float y = Random.Range (-rect.rect.height / 2, rect.rect.height / 2);
         transform.localPosition = new Vector3 (transform.localPosition.x, y);
         curY = y;
