@@ -17,7 +17,7 @@ public class Cell : MonoBehaviour
     }
 
     //准备可走的坐标
-    public void PrepareStep(){
+    public virtual void PrepareStep(){
         List<Vector2Int> possibleSteps = new List<Vector2Int>();
         Vector2Int right, up, left, down;
         right = new Vector2Int(1,0);
@@ -34,8 +34,7 @@ public class Cell : MonoBehaviour
     }
 
     //如果无法前进，则执行这一步
-    public void Reset(){
-    }
+    public void Reset(){}
 
     //向指定方向前进，并更新坐标
     public void Step(){
