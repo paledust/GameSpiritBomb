@@ -8,11 +8,11 @@ public class HUD : MonoBehaviour
     // 按钮 
     public Button startButton;
     public Button runingBackButton; // 运行中的返回按钮
-    public Button gameoverBackButton;   // 游戏结束界面的返回按钮
-    public Button gameoverNextLevelButton;   // 游戏结束界面的返回按钮
-    public Text gameoverText;
+    public Button gameoverButton;   // 游戏结束界面按钮
+    public Image gameoverImage;   // 游戏结束界面按钮
+
     // 界面
-    public Transform Runing;
+    public Transform Running;
 
     // 声音
     public GameObject audioOBJ;
@@ -22,14 +22,15 @@ public class HUD : MonoBehaviour
     public Text virusCountText;
     public Text healthCountText;
 
+    public Sprite WinImg;
+    public Sprite LoseImg;
+
     private void Awake() {
         OnBackButton ();
     }
     private void Start() {
         startButton.onClick.AddListener (StartGame);
         runingBackButton.onClick.AddListener (OnBackButton);
-        gameoverBackButton.onClick.AddListener (OnBackButton);
-        gameoverNextLevelButton.onClick.AddListener (NextLevel);
     }
 
     private void Update() {
@@ -40,34 +41,42 @@ public class HUD : MonoBehaviour
     }
     // 返回按钮
     void OnBackButton() {
-        Runing.gameObject.SetActive (false);
+        Running.gameObject.SetActive (false);
         startButton.transform.parent.gameObject.SetActive (true);
-        gameoverText.transform.parent.gameObject.SetActive (false);
+        gameoverButton.transform.parent.gameObject.SetActive (false);
         audioOBJ.GetComponent<AudioManager> ().PlayAudio (0);
     }
     // 开始按钮
     void StartGame() {
         startButton.transform.parent.gameObject.SetActive (false);
-        Runing.gameObject.SetActive (true);
+        Running.gameObject.SetActive (true);
         audioOBJ.GetComponent<AudioManager> ().PlayAudio (1);
     }
 
     public void DisplayWinScenes() {
-        gameoverText.transform.parent.gameObject.SetActive (true);
-        gameoverText.text = "游戏胜利";
-        gameoverNextLevelButton.interactable = true;
+        gameoverButton.transform.parent.gameObject.SetActive (true);
+        gameoverImage.sprite = WinImg;
+        gameoverButton.onClick.AddListener (NextLevel);
         audioOBJ.GetComponent<AudioManager> ().PlaySound (6); // 音效 success
     }
 
     public void DisplayLoseScenes() {
-        gameoverText.transform.parent.gameObject.SetActive (true);
-        gameoverText.text = "游戏失败";
-        gameoverNextLevelButton.interactable = false;
+        gameoverButton.transform.parent.gameObject.SetActive (true);
+        gameoverImage.sprite = LoseImg;
+        gameoverButton.onClick.AddListener (RefreshLevel);
         audioOBJ.GetComponent<AudioManager> ().PlaySound (7); // 音效 fail
     }
 
+    // 进行下一关
     void NextLevel() {
+        gameoverButton.transform.parent.gameObject.SetActive (false);
         GameManager.instance.NextLevel ();
+        gameoverButton.onClick.RemoveAllListeners();
     }
 
+    void RefreshLevel() {
+        gameoverButton.transform.parent.gameObject.SetActive (false);
+        GameManager.instance.RefreshLevel ();
+        gameoverButton.onClick.RemoveAllListeners ();
+    }
 }
