@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
     public List<Cell> GreyCells { get; protected set; }
     public GameObject GridRoot { get; protected set; }
     public static GameManager instance;
+    protected Cell ClickedGreyCell;
     protected bool FirstStep = true;
 
     //设置GameManager为Singleton，且不会因为加载关卡被重置
@@ -132,24 +133,26 @@ public class GameManager : MonoBehaviour
         Steps++;
         GreenCount++;
         getGreenCell (pos).EnableCell ();
-        Debug.Log ($"0 点击白色格子");
+        // Debug.Log ($"0 点击白色格子");
         UpdateWholeGrid ();
         CheckEndState();
     }
-    //点击灰色格子，并消灭它
+    //点击灰色格子，并削弱它
     public void InteractWithGreyCell(Cell cell){
         if (FirstStep)
             FirstStep = false;
         Steps++;
-        RemoveGreyCell(cell);
-        Debug.Log ($"0 点击灰色格子");
+        ReduceInfectionLevel(cell);
+        ClickedGreyCell = cell;
+        // Debug.Log ($"1 点击灰色格子");
         UpdateWholeGrid ();
+        ClickedGreyCell = null;
         CheckEndState();
     }
     //与红色格子交互，并限制它的移动
     public void InteractWithRedCell(Vector2Int pos){
         Steps++;
-        Debug.Log ($"0 点击红色格子");
+        // Debug.Log ($"2 点击红色格子");
         UpdateGreen ();
         UpdateVirusGrey ();
         CheckEndState();        
@@ -159,21 +162,21 @@ public class GameManager : MonoBehaviour
     protected void CheckEndState(){
         if(CheckFillState()){
             if(GreenCount > virusCount){
-                Debug.Log("Win");
+                // Debug.Log("Win");
                 NextLevel();
             }
             else{
-                Debug.Log("Lose");
+                // Debug.Log("Lose");
                 RefreshLevel();
             }
         }
         else{
             if(CheckLoseState()){
-                Debug.Log("Lose");
+                // Debug.Log("Lose");
                 RefreshLevel();
             }
             else if(CheckWinState()){
-                Debug.Log("Win");
+                // Debug.Log("Win");
                 NextLevel();
             }
         }
@@ -193,7 +196,7 @@ public class GameManager : MonoBehaviour
     }
 
     //消灭灰色格子
-    protected void RemoveGreyCell(Cell cell){
+    public void RemoveGreyCell(Cell cell){
         virusCount --;
         GreyCells.Remove(cell);
         Destroy(cell.gameObject);
@@ -205,12 +208,17 @@ public class GameManager : MonoBehaviour
         getGreenCell (pos).DisableCell ();
     }
 
+    //削弱灰色格子的感染值
+    protected void ReduceInfectionLevel(Cell cell){
+        cell.GetComponent<InfectionLevel>().ReduceLevel();
+    }
+
     //更新整个网格
     protected void UpdateWholeGrid() {
         UpdateGreen ();
         UpdateVirusGrey ();
         UpdateVirusRed ();
-        Debug.Log ($"1 更新整个网格");
+        // Debug.Log ($"3 更新整个网格");
     }
 
     //更新所有绿色格子
@@ -238,6 +246,8 @@ public class GameManager : MonoBehaviour
     //更新灰色格子
     protected void UpdateVirusGrey() {
         foreach (Cell cell in GreyCells) {
+            //跳过被点击的灰色格子
+            if(cell == ClickedGreyCell) continue;
             //更新灰色格子的位置
             cell.PrepareStep ();
 
@@ -344,6 +354,8 @@ public class GameManager : MonoBehaviour
 
         return true;
     }
+
+    //检查失败条件
     protected bool CheckLoseState() {
         return GreenCount == 0 && !FirstStep;
     }

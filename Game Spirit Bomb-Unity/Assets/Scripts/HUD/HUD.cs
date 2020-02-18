@@ -7,9 +7,13 @@ public class HUD : MonoBehaviour
 {
     // 按钮 
     public Button startButton;
+    public Button runingBackButton; // 运行中的返回按钮
+    public Button gameoverButton;   // 游戏结束界面按钮
+    public Image gameoverImage;   // 游戏结束界面按钮
+
     // 界面
-    public Transform Runing;
-    public Transform Win;
+    public Transform Running;
+
     // 声音
     public GameObject audioOBJ;
     // 显示 Text
@@ -18,30 +22,61 @@ public class HUD : MonoBehaviour
     public Text virusCountText;
     public Text healthCountText;
 
-    // 显示参数
-    public GameManager manager;
+    public Sprite WinImg;
+    public Sprite LoseImg;
 
     private void Awake() {
-        audioOBJ.GetComponent<AudioManager> ().PlayAudio(0);
-        Runing.gameObject.SetActive (false);
-        startButton.transform.parent.gameObject.SetActive (true);
+        OnBackButton ();
     }
     private void Start() {
         startButton.onClick.AddListener (StartGame);
+        runingBackButton.onClick.AddListener (OnBackButton);
     }
 
     private void Update() {
-        levelText.text = "level:" + manager.Level;
-        healthCountText.text = "HealthCount:" + manager.HealthCount;
-        virusCountText.text = "VirusCount:" + manager.virusCount;
-        stepText.text = "Step:" + manager.Steps;
+        levelText.text = "level:" + GameManager.instance.Level;
+        healthCountText.text = "HealthCount:" + GameManager.instance.HealthCount;
+        virusCountText.text = "VirusCount:" + GameManager.instance.virusCount;
+        stepText.text = "Step:" + GameManager.instance.Steps;
     }
-
+    // 返回按钮
+    void OnBackButton() {
+        Running.gameObject.SetActive (false);
+        startButton.transform.parent.gameObject.SetActive (true);
+        gameoverButton.transform.parent.gameObject.SetActive (false);
+        audioOBJ.GetComponent<AudioManager> ().PlayAudio (0);
+    }
     // 开始按钮
     void StartGame() {
-        Runing.gameObject.SetActive (true);
         startButton.transform.parent.gameObject.SetActive (false);
+        Running.gameObject.SetActive (true);
         audioOBJ.GetComponent<AudioManager> ().PlayAudio (1);
     }
 
+    public void DisplayWinScenes() {
+        gameoverButton.transform.parent.gameObject.SetActive (true);
+        gameoverImage.sprite = WinImg;
+        gameoverButton.onClick.AddListener (NextLevel);
+        audioOBJ.GetComponent<AudioManager> ().PlaySound (6); // 音效 success
+    }
+
+    public void DisplayLoseScenes() {
+        gameoverButton.transform.parent.gameObject.SetActive (true);
+        gameoverImage.sprite = LoseImg;
+        gameoverButton.onClick.AddListener (RefreshLevel);
+        audioOBJ.GetComponent<AudioManager> ().PlaySound (7); // 音效 fail
+    }
+
+    // 进行下一关
+    void NextLevel() {
+        gameoverButton.transform.parent.gameObject.SetActive (false);
+        GameManager.instance.NextLevel ();
+        gameoverButton.onClick.RemoveAllListeners();
+    }
+
+    void RefreshLevel() {
+        gameoverButton.transform.parent.gameObject.SetActive (false);
+        GameManager.instance.RefreshLevel ();
+        gameoverButton.onClick.RemoveAllListeners ();
+    }
 }
