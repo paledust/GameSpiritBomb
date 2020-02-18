@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 8996925752764186225}
   - component: {fileID: 114339466922683096}
   - component: {fileID: 2461234211022453675}
-  - component: {fileID: 114230326136749866}
   m_Layer: 8
   m_Name: VirusRed
   m_TagString: Untagged
@@ -101,7 +100,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.64, y: 0.64}
+    oldSize: {x: 0.8, y: 0.8}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -146,16 +145,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a9775fa1ba14d849a105ae7f19a6b07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114230326136749866
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4874961063260437532}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa720418ff9d1e74b8bd523765a8d96b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  HighLightColor: {r: 1, g: 1, b: 1, a: 1}
