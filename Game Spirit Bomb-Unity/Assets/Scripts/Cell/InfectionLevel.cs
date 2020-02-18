@@ -12,8 +12,8 @@ public class InfectionLevel : MonoBehaviour
     }
     public void UpgradeLevel(){
         level ++;
-        text.text = level.ToString();
         if(level > MAX_LEVEL) level = MAX_LEVEL;
+        text.text = level.ToString();
     }
     public void ReduceLevel(){
         level --;
