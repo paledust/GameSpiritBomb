@@ -5,7 +5,6 @@ using UnityEngine;
 public class HealthLevel : MonoBehaviour
 {
     public int level{get; protected set;}
-    public SpriteRenderer spriteRenderer;
     Cell cell;
     public void UpdateLevel(){
         if(!cell) cell = GetComponent<Cell>();
@@ -21,8 +20,5 @@ public class HealthLevel : MonoBehaviour
         if(GameManager.instance.IfPosGreen(cell.index + up))   {level ++;}
         if(GameManager.instance.IfPosGreen(cell.index + left)) {level ++;}
         if(GameManager.instance.IfPosGreen(cell.index + down)) {level ++;}
-
-        float levelColor = .5f+level*.5f/4;
-        spriteRenderer.color = new Color(0,levelColor,0,1);       
     }
 }

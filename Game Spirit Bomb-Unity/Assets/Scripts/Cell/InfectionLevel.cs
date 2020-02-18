@@ -13,9 +13,6 @@ public class InfectionLevel : MonoBehaviour
     public void UpgradeLevel(){
         level ++;
         if(level > MAX_LEVEL) level = MAX_LEVEL;
-
-        float levelColor = .5f-level*.5f/5;
-        spriteRenderer.color = new Color(levelColor,levelColor,levelColor,1);
     }
     public void ReduceLevel(){
         level --;
@@ -23,7 +20,5 @@ public class InfectionLevel : MonoBehaviour
             GameManager.instance.RemoveGreyCell(GetComponent<Cell>());
             return;
         }
-        float levelColor = .5f-level*.5f/5;
-        spriteRenderer.color = new Color(levelColor,levelColor,levelColor,1);        
     }
 }
