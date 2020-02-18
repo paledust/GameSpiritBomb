@@ -19,7 +19,7 @@ public class Cell_Grey : Cell
             possibleSteps.Add(left);
         if(GameManager.instance.CheckGrid(index + down)&&!GameManager.instance.IfPosRed(index + down))  
             possibleSteps.Add(down);
-        
+
         nextIndex = index + possibleSteps[Random.Range(0, possibleSteps.Count)];        
     }
 }
