@@ -32,6 +32,7 @@ public class HUD : MonoBehaviour
     public Sprite LoseImg;
 
     private void Awake() {
+        //Screen.SetResolution (607, 1080, false); // PC打包默认大小
         OnBackButton ();
         
     }
