@@ -7,7 +7,10 @@ public class HUD : MonoBehaviour
 {
     // 按钮
     public Button startButton;
+
     public Transform Runing;
+    public Transform NotDisplay;
+
     // 显示 Text
     public Text levelText;
     public Text stepText;
@@ -15,32 +18,27 @@ public class HUD : MonoBehaviour
     public Text healthCountText;
 
     [HideInInspector]
-    public int healthCount = 0;
+    public int healthCount;
     [HideInInspector]
-    public int virusCount = 0;
+    public int virusCount;
     [HideInInspector]
-    public int step = 0;
+    public int step;
     [HideInInspector]
-    public int level = 0;
+    public int level;
     private void Awake() {
-
-        Runing.gameObject.SetActive (false);
-        startButton.transform.parent.gameObject.SetActive (true);
+        Runing.parent = NotDisplay;
+        startButton.transform.parent.parent = transform;
     }
     private void Start() {
+
+
         startButton.onClick.AddListener (StartGame);
     }
 
-    private void Update() {
-        levelText.text = "level:" + level;
-        healthCountText.text = "healthCount:" + healthCount;
-        virusCountText.text = "VirusCount:" + healthCount;
-        stepText.text = "Step:" + step;
-    }
     // 开始按钮
     void StartGame() {
-        Runing.gameObject.SetActive (true);
-        startButton.transform.parent.gameObject.SetActive (false);
+        Runing.parent = transform;
+        startButton.transform.parent.parent = NotDisplay;
     }
 
 }
