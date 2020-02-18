@@ -9,8 +9,13 @@ public class HUD : MonoBehaviour
     public Button startButton;
     public Button runingBackButton; // 运行中的返回按钮
     public Button gameoverButton;   // 游戏结束界面按钮
-    public Image gameoverImage;   // 游戏结束界面按钮
+    public Button staffButton;         // 制作组名单按钮
+    public GameObject staffOBJ;           // 制作组名单界面
+    public Image gameoverImage;     // 游戏结束界面图片
 
+    float staffCD = 5f;
+    float staffTime = 0f;
+    bool isSetStaff = false;
     // 界面
     public Transform Running;
 
@@ -27,10 +32,12 @@ public class HUD : MonoBehaviour
 
     private void Awake() {
         OnBackButton ();
+        
     }
     private void Start() {
         startButton.onClick.AddListener (StartGame);
         runingBackButton.onClick.AddListener (OnBackButton);
+        staffButton.onClick.AddListener (DisplayStaff);
     }
 
     private void Update() {
@@ -38,6 +45,11 @@ public class HUD : MonoBehaviour
         healthCountText.text = "HealthCount:" + GameManager.instance.HealthCount;
         virusCountText.text = "VirusCount:" + GameManager.instance.virusCount;
         stepText.text = "Step:" + GameManager.instance.Steps;
+
+        if (Time.time - staffCD > staffTime && isSetStaff == true) {
+            staffOBJ.SetActive (false);
+            
+        }
     }
     // 返回按钮
     void OnBackButton() {
@@ -78,5 +90,11 @@ public class HUD : MonoBehaviour
         gameoverButton.transform.parent.gameObject.SetActive (false);
         GameManager.instance.RefreshLevel ();
         gameoverButton.onClick.RemoveAllListeners ();
+    }
+
+    void DisplayStaff() {
+        staffTime = Time.time;
+        isSetStaff = true;
+        staffOBJ.SetActive (true);
     }
 }
