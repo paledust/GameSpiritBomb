@@ -61,6 +61,7 @@ public class GameManager : MonoBehaviour
     //卸载所有关卡资源
     public void UnloadLevel() {
         GreenCount = 0;
+        FirstStep  = true;
         GreyCells.Clear();
         Destroy(GridRoot.gameObject);
     }
@@ -176,6 +177,7 @@ public class GameManager : MonoBehaviour
         // Debug.Log ($"2 点击红色格子");
         UpdateGreen ();
         UpdateVirusGrey ();
+        UpdateGreen ();
         CheckEndState();        
     }
 
@@ -245,6 +247,7 @@ public class GameManager : MonoBehaviour
         UpdateGreen ();
         UpdateVirusGrey ();
         UpdateVirusRed ();
+        UpdateGreen ();
         // Debug.Log ($"3 更新整个网格");
     }
 
