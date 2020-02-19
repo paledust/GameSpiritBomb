@@ -202,6 +202,7 @@ GameObject:
   - component: {fileID: 519420032}
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
+  - component: {fileID: 519420030}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -217,6 +218,19 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_Enabled: 1
+--- !u!114 &519420030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77847b5d6f4637e4ba90b70f4f0f7c9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ReferenceRatio: {x: 9, y: 16}
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -1687,6 +1701,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: 162ca123dd14e41f29c1a4b285b2cdb1,
         type: 3}
+    - target: {fileID: 3970411744368243451, guid: 4c36684a6d7565d4fb2213fa2c69cbe0,
+        type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 519420031}
+    - target: {fileID: 3970411744368243451, guid: 4c36684a6d7565d4fb2213fa2c69cbe0,
+        type: 3}
+      propertyPath: m_PlaneDistance
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4c36684a6d7565d4fb2213fa2c69cbe0, type: 3}
 --- !u!114 &1758514888 stripped
@@ -1832,6 +1856,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerGreen
       objectReference: {fileID: 0}
+    - target: {fileID: 4778936804903125125, guid: 776f2068274631443a73c15c15eca91c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4778936804903125127, guid: 776f2068274631443a73c15c15eca91c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1901,6 +1930,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: VirusRed
       objectReference: {fileID: 0}
+    - target: {fileID: 4874961063260437532, guid: e845cc467666cd549a78b1cd7f2d8f68,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4874961063260437534, guid: e845cc467666cd549a78b1cd7f2d8f68,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1969,6 +2003,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Grid
+      objectReference: {fileID: 0}
+    - target: {fileID: 6242516759886230915, guid: 36ca6aaf580229b44a7c0a7188c06dae,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6242516759886230926, guid: 36ca6aaf580229b44a7c0a7188c06dae,
         type: 3}
@@ -2059,6 +2098,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: VirusGrey
+      objectReference: {fileID: 0}
+    - target: {fileID: 7639969541301661998, guid: 110f3fff7f7011240acac6818517bad6,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7639969541301661996, guid: 110f3fff7f7011240acac6818517bad6,
         type: 3}
