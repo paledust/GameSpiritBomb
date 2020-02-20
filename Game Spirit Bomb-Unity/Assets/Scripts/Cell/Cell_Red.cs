@@ -11,10 +11,10 @@ public class Cell_Red : Cell
         left  = new Vector2Int(-1,0);
         down  = new Vector2Int(0,-1);
 
-        if(GameManager.instance.CheckGrid(index + right)&&!GameManager.instance.IfPosGreen(index + right)) possibleSteps.Add(right);
-        if(GameManager.instance.CheckGrid(index + up)&&!GameManager.instance.IfPosGreen(index + up))    possibleSteps.Add(up);
-        if(GameManager.instance.CheckGrid(index + left)&&!GameManager.instance.IfPosGreen(index + left))  possibleSteps.Add(left);
-        if(GameManager.instance.CheckGrid(index + down)&&!GameManager.instance.IfPosGreen(index + down))  possibleSteps.Add(down);
+        if(GameManager.instance.CheckGrid(index + right)) possibleSteps.Add(right);
+        if(GameManager.instance.CheckGrid(index + up))    possibleSteps.Add(up);
+        if(GameManager.instance.CheckGrid(index + left))  possibleSteps.Add(left);
+        if(GameManager.instance.CheckGrid(index + down))  possibleSteps.Add(down);
         
         nextIndex = index + possibleSteps[Random.Range(0, possibleSteps.Count)];       
     }
