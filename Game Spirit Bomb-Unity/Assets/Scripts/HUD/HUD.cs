@@ -52,8 +52,9 @@ public class HUD : MonoBehaviour
 
         if (Time.time - staffCD > staffTime && isSetStaff == true) {
             staffOBJ.SetActive (false);
-            
+            isSetStaff = false;
         }
+
     }
     // 返回按钮
     void OnBackButton() {

@@ -260,15 +260,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startButton: {fileID: 3970411746198290693}
   runingBackButton: {fileID: 5490646547877710172}
-  gameoverBackButton: {fileID: 0}
-  gameoverNextLevelButton: {fileID: 5490646546728805612}
-  gameoverText: {fileID: 0}
+  gameoverWinButton: {fileID: 0}
+  gameoverLoseButton: {fileID: 0}
+  staffButton: {fileID: 0}
+  staffOBJ: {fileID: 0}
+  gameoverImage: {fileID: 0}
   Running: {fileID: 0}
   audioOBJ: {fileID: 0}
   levelText: {fileID: 3970411746024236501}
   stepText: {fileID: 3970411744817816636}
   virusCountText: {fileID: 3970411744581293803}
   healthCountText: {fileID: 3970411744554187497}
+  WinImg: {fileID: 0}
+  LoseImg: {fileID: 0}
 --- !u!1 &3970411744371378703
 GameObject:
   m_ObjectHideFlags: 0
@@ -1974,7 +1978,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 471f26809fd2c4c7ca9b9cf9d5c8081e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4897b8359d92e4ec4a4e166d8f105424, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
