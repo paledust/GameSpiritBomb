@@ -114,6 +114,7 @@ public class GameManager : MonoBehaviour
             GameObject grid = Instantiate (GridPrefab);
             grid.transform.parent = GridRoot.transform;
             grid.transform.localPosition = pos;
+            grid.transform.localPosition += Vector3.forward;
             grid.transform.localScale *= perUnitScale;
             grid.GetComponent<Cell> ().SetIndex (i % RowCount, i / RowCount);
 
@@ -164,7 +165,7 @@ public class GameManager : MonoBehaviour
         getGreenCell (pos).EnableCell ();
         UpdateWholeGrid ();
         //停顿让移动完全进行
-        yield return new WaitForSeconds(cellMoveTime);
+        yield return new WaitForSeconds(cellMoveTime+.1f);
 
         //如果游戏未结束，重新开启输入检测
         if(!CheckEndState()) WaitForInput = true;
@@ -324,33 +325,33 @@ public class GameManager : MonoBehaviour
 
     //更新灰色格子
     protected void UpdateVirusGrey() {
-        foreach (Cell cell in GreyCells) {
+        for (int i=GreyCells.Count-1; i>=0; i--) {
             //跳过被点击的灰色格子
-            if(cell == ClickedGreyCell) continue;
+            if(GreyCells[i] == ClickedGreyCell) continue;
             //更新灰色格子的位置
-            cell.PrepareStep ();
+            GreyCells[i].PrepareStep ();
 
-            if (IfPosGrey (cell.nextIndex) || IfPosRed (cell.nextIndex)) {
-                cell.Reset ();
+            if (IfPosGrey (GreyCells[i].nextIndex) || IfPosRed (GreyCells[i].nextIndex)) {
+                GreyCells[i].Reset ();
             }
-            else if (IfPosGreen (cell.nextIndex)) {
-                if(ResolveGreenCell(getGreenCell(cell.nextIndex), cell)){
-                    RemoveGreenCell(cell.nextIndex);
-                    PlaceGreyCell(cell.index);
-                    cell.Step ();
-                    return;
+            else if (IfPosGreen (GreyCells[i].nextIndex)) {
+                if(ResolveGreenCell(getGreenCell(GreyCells[i].nextIndex), GreyCells[i])){
+                    RemoveGreenCell(GreyCells[i].nextIndex);
+                    PlaceGreyCell(GreyCells[i].index);
+                    GreyCells[i].Step ();
+                    continue;
                 }
                 else{
-                    RemoveGreyCell(cell);
-                    return;
+                    RemoveGreyCell(GreyCells[i]);
+                    continue;
                 }
             }
             else {
-                cell.Step ();
+                GreyCells[i].Step ();
             }
 
             //移动之后，灰色格子感染值+1
-            cell.GetComponent<InfectionLevel>().UpgradeLevel();
+            GreyCells[i].GetComponent<InfectionLevel>().UpgradeLevel();
         }
     }
 
