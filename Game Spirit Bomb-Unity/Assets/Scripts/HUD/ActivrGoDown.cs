@@ -75,7 +75,7 @@ public class ActivrGoDown : MonoBehaviour
         g = 6f;
         num = 0;
         time = Time.time;
-        rectTransform.localPosition = new Vector3 (0,
+        rectTransform.localPosition = new Vector3 (rectTransform.localPosition.x,
             hudRect.rect.height);
     }
 }
