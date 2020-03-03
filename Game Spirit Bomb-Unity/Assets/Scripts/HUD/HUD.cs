@@ -72,8 +72,8 @@ public class HUD : MonoBehaviour
     private void Update() {
         // 界面文字显示
         levelText.text = "level:" + GameManager.instance.Level;
-        healthCountText.text = "HealthCount:" + GameManager.instance.HealthCount;
-        virusCountText.text = "VirusCount:" + GameManager.instance.virusCount;
+        healthCountText.text = "Health:" + GameManager.instance.HealthCount;
+        virusCountText.text = "Virus:" + GameManager.instance.virusCount;
         stepText.text = "Step:" + GameManager.instance.Steps;
         timerText.text = "Timer:"+ GameManager.instance.Timer;
         // 制作组名单自动关闭
@@ -115,6 +115,7 @@ public class HUD : MonoBehaviour
 
     // 胜利界面
     public void DisplayWinScenes() {
+        GameManager.instance.closeTimer();
         gameoverImage.transform.parent.gameObject.SetActive (true);
         gameoverImage.sprite = WinImg;
         goDownScript.isTime = true;
@@ -124,6 +125,7 @@ public class HUD : MonoBehaviour
     }
     // 失败界面
     public void DisplayLoseScenes() {
+        GameManager.instance.closeTimer();
         gameoverImage.transform.parent.gameObject.SetActive (true);
         gameoverImage.sprite = LoseImg;
         goDownScript.isTime = true;

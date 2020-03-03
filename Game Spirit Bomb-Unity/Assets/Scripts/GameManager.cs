@@ -2,6 +2,9 @@
 using System.Collections;
 using UnityEngine;
 using System.Linq;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+
 public class GameManager : MonoBehaviour
 {
     [Header ("Prefabs")]
@@ -36,6 +39,7 @@ public class GameManager : MonoBehaviour
     protected Cell ClickedGreyCell;
     protected bool FirstStep = true;
     protected Coroutine _TimerCoroutine = null;
+    protected Save _save;
     //设置GameManager为Singleton，且不会因为加载关卡被重置
     void Awake() {
         if (instance == null) {
@@ -45,6 +49,8 @@ public class GameManager : MonoBehaviour
         else if (instance != null) {
             Destroy (gameObject);
         }
+
+        LoadByBin();
     }
 
     //获取主摄像机
@@ -64,6 +70,7 @@ public class GameManager : MonoBehaviour
 
     //卸载所有关卡资源
     public void UnloadLevel() {
+        closeTimer();
         GreenCount = 0;
         FirstStep  = true;
         GreyCells.Clear();
@@ -94,6 +101,7 @@ public class GameManager : MonoBehaviour
 
     //创建格子
     public void GenerateGrid() {
+        SaveByBin();
         //创建一个网格根节点
         GridRoot = new GameObject ("GridRoot");
         GridRoot.transform.position = Vector2.zero;
@@ -145,11 +153,15 @@ public class GameManager : MonoBehaviour
         WaitForInput = true;
 
 
-        if (_TimerCoroutine != null) StopCoroutine(_TimerCoroutine);
+        closeTimer();
 
         _TimerCoroutine = StartCoroutine(Coroutine_TimerDown(10));
     }
 
+    public void closeTimer()
+    {
+        if (_TimerCoroutine != null) StopCoroutine(_TimerCoroutine);
+    }
     //放置灰色格子
     public void PlaceGreyCell(Vector2Int pos) {
         GameObject grid = Instantiate (VirusGreyPrefab);
@@ -610,5 +622,77 @@ public class GameManager : MonoBehaviour
     //检查失败条件
     protected bool CheckLoseState() {
         return GreenCount == 0 && !FirstStep;
+    }
+
+
+
+
+
+    //创建Save对象并存储当前游戏状态信息
+    private Save CreateSaveGO()
+    {
+        //新建Save对象
+        Save save = new Save();
+        //遍历所有的target
+        //如果其中有处于激活状态的怪物，就把该target的位置信息和激活状态的怪物的类型添加到List中
+
+        save.level = Level;
+        //返回该Save对象
+        return save;
+    }
+
+    //通过读档信息重置我们的游戏状态（分数、激活状态的怪物）
+    private void SetGame(Save save)
+    {
+        Level = save.level;
+    }
+
+
+    //二进制方法：存档和读档
+    private void SaveByBin()
+    {
+        //序列化过程（将Save对象转换为字节流）
+        //创建Save对象并保存当前游戏状态
+        Save save = CreateSaveGO();
+        //创建一个二进制格式化程序
+        BinaryFormatter bf = new BinaryFormatter();
+        //创建一个文件流
+        FileStream fileStream = File.Create(Application.persistentDataPath + "/game.bin");
+        //用二进制格式化程序的序列化方法来序列化Save对象,参数：创建的文件流和需要序列化的对象
+        bf.Serialize(fileStream, save);
+        //关闭流
+        fileStream.Close();
+
+        //如果文件存在，则显示保存成功
+        if (File.Exists(Application.persistentDataPath + "/game.bin"))
+        {
+            //UIManager._instance.ShowMessage("保存成功");
+        }
+    }
+
+    private void LoadByBin()
+    {
+        if (File.Exists(Application.persistentDataPath + "/game.bin"))
+        {
+            //反序列化过程
+            //创建一个二进制格式化程序
+            BinaryFormatter bf = new BinaryFormatter();
+            //打开一个文件流
+            FileStream fileStream = File.Open(Application.persistentDataPath + "/game.bin", FileMode.Open);
+            //调用格式化程序的反序列化方法，将文件流转换为一个Save对象
+            Save save = (Save)bf.Deserialize(fileStream);
+            //关闭文件流
+            fileStream.Close();
+
+            SetGame(save);
+          
+
+        }
+        else
+        {
+           
+        }
+
+
     }
 }
