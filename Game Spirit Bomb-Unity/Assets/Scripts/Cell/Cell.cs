@@ -7,13 +7,18 @@ public class Cell : MonoBehaviour
     public bool IF_Activate{get{return this.gameObject.activeSelf;}}
     public Vector2Int index{get; protected set;}
     public Vector2Int nextIndex{get; protected set;}
-
+    public int id { get; protected set; } //当前格子ID号
     //更新坐标
     public void SetIndex(Vector2Int _index){
         index = _index;
     }
     public void SetIndex(int x, int y){
         SetIndex(new Vector2Int(x,y));
+    }
+
+    public void SetId(int _id)
+    {
+        id = _id;
     }
 
     //准备可走的坐标

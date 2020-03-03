@@ -34,6 +34,7 @@ public class HUD : MonoBehaviour
     public GameObject audioOBJ;
     // 显示 Text
     public Text levelText;
+    public Text timerText;
     public Text stepText;
     public Text virusCountText;
     public Text healthCountText;
@@ -74,7 +75,7 @@ public class HUD : MonoBehaviour
         healthCountText.text = "HealthCount:" + GameManager.instance.HealthCount;
         virusCountText.text = "VirusCount:" + GameManager.instance.virusCount;
         stepText.text = "Step:" + GameManager.instance.Steps;
-
+        timerText.text = "Timer:"+ GameManager.instance.Timer;
         // 制作组名单自动关闭
         if (Time.time - staffCD > staffTime && isSetStaff == true) {
             staffOBJ.SetActive (false);

@@ -4,7 +4,7 @@ public class InfectionLevel : MonoBehaviour
 {
     public int level{get; protected set;}
     public TextMesh text;
-    public static int MAX_LEVEL = 5;
+    public static int MAX_LEVEL = 999;
     // Start is called before the first frame update
     void Start()
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
-
+using System.Linq;
 public class GameManager : MonoBehaviour
 {
     [Header ("Prefabs")]
@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public float cellMoveTime = .2f;
     [Header ("Level")]
     public int Level = 1;//关卡数
+    public int Timer = 10;//倒计时
     public int TotalGrids { get { return (Level*2) * (Level*3); } }//总网格数
     public int RowCount { get { return Level*2; } }//每一排网格数
     public int ColumnCount{ get { return Level*3; }}//每一纵队网格数
@@ -34,7 +35,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     protected Cell ClickedGreyCell;
     protected bool FirstStep = true;
-
+    protected Coroutine _TimerCoroutine = null;
     //设置GameManager为Singleton，且不会因为加载关卡被重置
     void Awake() {
         if (instance == null) {
@@ -74,6 +75,7 @@ public class GameManager : MonoBehaviour
         WaitForInput = true;
         UnloadLevel();
         GenerateGrid();
+       
     }
 
     //加载下一关
@@ -123,6 +125,7 @@ public class GameManager : MonoBehaviour
             GreenCells[i].transform.localPosition = pos;
             GreenCells[i].transform.localScale *= perUnitScale;
             GreenCells[i].SetIndex (i % RowCount, i / RowCount);
+            GreenCells[i].SetId(i);
             GreenCells[i].DisableCell ();
         }
 
@@ -140,6 +143,11 @@ public class GameManager : MonoBehaviour
         virusCount = 1;
         Steps = 0;
         WaitForInput = true;
+
+
+        if (_TimerCoroutine != null) StopCoroutine(_TimerCoroutine);
+
+        _TimerCoroutine = StartCoroutine(Coroutine_TimerDown(10));
     }
 
     //放置灰色格子
@@ -153,8 +161,26 @@ public class GameManager : MonoBehaviour
         virusCount ++;
     }
 
-//用coroutine处理格子的交互
-//Coroutine开始
+
+    //倒计时
+    IEnumerator Coroutine_TimerDown(int timer) {
+        Timer = timer;
+        while (Timer > 0)
+        {
+            yield return new WaitForSeconds(1);
+            Timer--;
+            if(Timer <= 3 && Timer > 0) audioManager.PlaySound(9);
+
+        }
+
+        audioManager.PlaySound(10);
+        TimerOut();
+
+    }
+
+
+    //用coroutine处理格子的交互
+    //Coroutine开始
     IEnumerator Coroutine_WhiteCellInteraction(Vector2Int pos){
         WaitForInput = false;
         if (FirstStep)
@@ -234,6 +260,7 @@ public class GameManager : MonoBehaviour
 
     //检查胜败条件
     protected bool CheckEndState(){
+      
         if(CheckFillState()){
             if(GreenCount > virusCount){
                 hud.DisplayWinScenes();
@@ -267,7 +294,8 @@ public class GameManager : MonoBehaviour
         if(infectionLevel >= healthLevel){
             return true;
         }
-        else{
+        else{ //补尝倒计时间
+            if(Timer>0)Timer++;
             return false;
         }
     }
@@ -292,23 +320,163 @@ public class GameManager : MonoBehaviour
         cell.GetComponent<InfectionLevel>().ReduceLevel();
     }
 
+    protected void TimerOut() //倒计时结束
+    {
+        if (Timer <= 0)
+        {
+            if (WaitForInput == true)
+            {
+                WaitForInput = false;
+            }
+
+            hud.DisplayLoseScenes();
+        }
+    }
+
     //更新整个网格
     protected void UpdateWholeGrid() {
-        UpdateGreen ();
+        UpdateGreen2 ();
         UpdateVirusGrey ();
         UpdateVirusRed ();
-        UpdateGreen ();
+        UpdateGreen2 ();
+        // UpdateGreen2();
         // Debug.Log ($"3 更新整个网格");
+        TimerOut();
     }
 
     //更新所有绿色格子
     protected void UpdateGreen() {
-        for(int i=0; i<GreenCells.Length; i++){
+      
+        for (int i=0; i<GreenCells.Length; i++){
             if(GreenCells[i].IF_Activate){
                 GreenCells[i].GetComponent<HealthLevel>().UpdateLevel();
             }
         }
     }
+
+
+
+    #region 判断绿块数量
+
+    //递归算法
+    protected void addBlock(ref ArrayList block, Cell checkCell)
+    {
+        if (block.IndexOf(checkCell.id) != -1) return;
+
+        int blockid = checkInBlock(checkCell.id);
+
+        if (blockid != -1) return;
+
+        block.Add(checkCell.id);
+
+
+        if (IfPosGreen(checkCell.index + Vector2Int.up) == true)
+        {
+
+            addBlock(ref block, getGreenCell(checkCell.index + Vector2Int.up));
+        }
+
+
+        if (IfPosGreen(checkCell.index + Vector2Int.right) == true)
+        {
+
+            addBlock(ref block, getGreenCell(checkCell.index + Vector2Int.right));
+        }
+
+        if (IfPosGreen(checkCell.index + Vector2Int.down) == true)
+        {
+
+           addBlock(ref block, getGreenCell(checkCell.index + Vector2Int.down));
+        }
+
+        if (IfPosGreen(checkCell.index + Vector2Int.left) == true)
+        {
+
+             addBlock(ref block, getGreenCell(checkCell.index + Vector2Int.left));
+        }
+
+
+      
+
+    }
+
+
+
+    protected List<ArrayList> greenBlock = new List<ArrayList>();
+
+
+    //判断是否在块记录中 返回块id
+    protected int checkInBlock(int cellId) 
+    {
+        var res = (from q2 in greenBlock where q2.Contains(cellId) == true select q2).ToList();//
+        if(res.Count > 0){
+            return (int)res[0][0];
+        }
+        else
+        {
+            return -1;
+        }
+       
+    }
+
+    //判断连成片个数
+    protected int checkNBISGree (int count)
+    {
+
+
+        //IfPosGreen();
+        return 0;
+
+
+    }
+
+
+    //更新所有绿色格子 检查块连成块
+    protected void UpdateGreen2()
+    {
+        Debug.Log("UpdateGreen2 begin--->");
+        //刷新绿色组块表
+        greenBlock.Clear();
+        for (int i = 0; i < GreenCells.Length; i++)
+        {
+            ArrayList block = new ArrayList();
+            block.Add(greenBlock.Count);
+            if (GreenCells[i].IF_Activate)
+            {
+
+                addBlock(ref block, GreenCells[i]);
+                if(block.Count>1) greenBlock.Add(block);
+            }
+
+
+        }
+
+
+       //判断是否在某块中
+        for (int i = 0; i < GreenCells.Length; i++)
+        {
+            if (GreenCells[i].IF_Activate)
+            {
+                var res = (from q2 in greenBlock where q2.Contains(i) == true select q2).ToList();//
+                //Debug.Log("green id:"+i);
+                if(res.Count >0)
+                    GreenCells[i].GetComponent<HealthLevel>().setLevel(res[0].Count-1);
+                else
+                    GreenCells[i].GetComponent<HealthLevel>().setLevel(1);
+            }
+        }
+
+    
+        //先更新绿块列表 
+
+        //在更新单个格子生命值
+
+
+    }
+
+    #endregion
+
+  
 
     //更新红色格子的位置
     protected void UpdateVirusRed() {
@@ -326,8 +494,13 @@ public class GameManager : MonoBehaviour
     //更新灰色格子
     protected void UpdateVirusGrey() {
         for (int i=GreyCells.Count-1; i>=0; i--) {
+
             //跳过被点击的灰色格子
-            if(GreyCells[i] == ClickedGreyCell) continue;
+            if (GreyCells[i] == ClickedGreyCell) continue;
+
+            //灰色格子感染值+1
+            GreyCells[i].GetComponent<InfectionLevel>().UpgradeLevel();
+
             //更新灰色格子的位置
             GreyCells[i].PrepareStep ();
 
@@ -350,8 +523,7 @@ public class GameManager : MonoBehaviour
                 GreyCells[i].Step ();
             }
 
-            //移动之后，灰色格子感染值+1
-            GreyCells[i].GetComponent<InfectionLevel>().UpgradeLevel();
+         
         }
     }
 
